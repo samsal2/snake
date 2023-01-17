@@ -6,14 +6,19 @@ fn addGLFW(b: *std.build.Builder, exe: *std.build.LibExeObjStep) !void {
     try glfw.link(b, exe, .{});
 }
 
-fn addGlad(_: *std.build.Builder, exe: *std.build.LibExeObjStep) !void {
-    exe.addIncludePath("libs/glad/include");
-    exe.addCSourceFile("libs/glad/src/gl.c", &[_][]const u8 { "-std=c99", "-Ofast" } );
-    
-    if (exe.target.isDarwin()) {
-    } else {
-    }
+ //fn addGlad(_: *std.build.Builder, exe: *std.build.LibExeObjStep) !void {
+ //    exe.addIncludePath("libs/glad/include");
+ //    exe.addCSourceFile("libs/glad/src/gl.c", &[_][]const u8 { "-std=c99", "-Ofast" } );
+ //    
+ //    if (exe.target.isDarwin()) {
+ //    } else {
+ //    }
+ //}
+
+fn addOpenGL(_: *std.build.Builder, exe: *std.build.LibExeObjStep) !void {
+  exe.addPackagePath("gl", "libs/gl.zig");
 }
+
 
 pub fn build(b: *std.build.Builder) void {
     // Standard target options allows the person running `zig build` to choose
@@ -29,6 +34,7 @@ pub fn build(b: *std.build.Builder) void {
     const exe = b.addExecutable("redesigned-enigma", "src/main.zig");
     // addGlad(b, exe) catch unreachable;
     addGLFW(b, exe) catch unreachable;
+    addOpenGL(b, exe) catch unreachable;
     exe.setTarget(target);
     exe.setBuildMode(mode);
     exe.install();
